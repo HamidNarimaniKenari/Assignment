@@ -1,0 +1,74 @@
+namespace Assignment1
+{
+   
+    public enum TriangleType
+    {
+        Scalene = 1, // no two sides are the same length
+        Isosceles = 2, // two sides are the same length and one differs
+        Equilateral = 3, // all sides are the same length
+        Error = 4 // inputs can't produce a triangle
+    }
+
+    public class TriangleTester
+    {
+        public static TriangleType GetTriangleType(int a, int b, int c)
+        {
+            //Placing items in an array for processing 
+            int[] values = new int[3] {a, b, c};
+
+            if (a <= 0 || b <= 0 || c <= 0) 
+            {
+                return TriangleType.Error;
+            }
+            else if (values.Distinct().Count() == 1) //There is only one distinct value in the set, therefore all sides are of equal length
+            {
+                return TriangleType.Equilateral;
+            }
+            else if (values.Distinct().Count() == 2) //There are only two distinct values in the set, therefore two sides are equal and one is not
+            {
+                return TriangleType.Isosceles;
+            }
+            else if (values.Distinct().Count() == 3) // There are three distinct values in the set, therefore no sides are equal
+            {
+                return TriangleType.Scalene;
+            }
+            else
+            {
+                return TriangleType.Error;
+            }
+        }
+    }
+
+    [TestFixture]
+    public class TriangleTesterTests
+    {
+        [Test]
+        public void Test_GetTriangleType()
+        {
+            Assert.AreEqual(TriangleType.Equilateral, 
+                            TriangleTester.GetTriangleType(4, 4, 4), 
+                            "GetTriangleType(4, 4, 4) did not return Equilateral");
+
+            Assert.AreEqual(TriangleType.Isosceles, 
+                            TriangleTester.GetTriangleType(4, 4, 3),
+                            "GetTriangleType(4, 4, 3) did not return Isosceles");
+
+            Assert.AreEqual(TriangleType.Scalene, 
+                            TriangleTester.GetTriangleType(4, 3, 2),
+                            "GetTriangleType(4, 3, 2) did not return Scalene");
+
+            Assert.AreEqual(TriangleType.Error, 
+                            TriangleTester.GetTriangleType(-4, 4, 4),
+                            "GetTriangleType(-4, 4, 4) did not return Error");
+
+            Assert.AreEqual(TriangleType.Error,
+                            TriangleTester.GetTriangleType(4, -4, 4),
+                            "GetTriangleType(4, -4, 4) did not return Error");
+
+            Assert.AreEqual(TriangleType.Error,
+                            TriangleTester.GetTriangleType(4, 4, -4),
+                            "GetTriangleType(4, 4, -4) did not return Error");
+        }
+    }
+
+}
